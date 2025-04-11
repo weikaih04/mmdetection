@@ -199,8 +199,8 @@ coco_od_dataset = dict(
 
 train_dataloader = dict(
     _delete_=True,
-    batch_size=4,
-    num_workers=0,
+    batch_size=16,
+    num_workers=4,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     batch_sampler=dict(type='AspectRatioBatchSampler'),
@@ -221,7 +221,9 @@ optim_wrapper = dict(
             'absolute_pos_embed': dict(decay_mult=0.),
             'backbone': dict(lr_mult=0.1),
             'language_model': dict(lr_mult=0.1),
-        }))
+        }
+    ),
+)
 
 # learning policy
 max_epochs = 30

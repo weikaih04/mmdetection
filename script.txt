@@ -1,0 +1,35 @@
+bash train_swin_tiny_3_18_pretrain.sh 8 30 "single_vocab" \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/model_weights/grounding_dino_swin-t_pretrain_obj365_goldg.pth \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/configs/mm_grounding_dino/synthetic_data/single_pretrain/grounding_dino_swin-t_pretrain_synthetic_data_only.py \
+  resume
+
+
+bash train_swin_tiny_3_18_pretrain.sh 8 30 "ovd_category_4_8" \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/model_weights/grounding_dino_swin-t_pretrain_obj365_goldg.pth \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/configs/mm_grounding_dino/synthetic_data/single_pretrain/grounding_dino_swin-t_pretrain_synthetic_data_only_ovd_category.py \
+  resume
+
+bash train_swin_tiny_3_18_pretrain.sh 8 30 "ref_category_4_8" \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/model_weights/grounding_dino_swin-t_pretrain_obj365_goldg.pth \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/configs/mm_grounding_dino/synthetic_data/single_pretrain/grounding_dino_swin-t_pretrain_synthetic_data_only_ref_category.py \
+  resume
+
+bash train_swin_tiny_3_18_pretrain_test.sh 8 30 "coco_before_training_eval_4_8" \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/model_weights/grounding_dino_swin-t_pretrain_obj365_goldg.pth \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/configs/mm_grounding_dino/synthetic_data/single_pretrain/grounding_dino_swin-t_pretrain_synthetic_data_only_ovd_category.py \
+  overwrite
+
+bash eval_swin_tiny_3_18.sh 8 "my_eval" \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/model_weights/grounding_dino_swin-t_pretrain_obj365_goldg.pth
+
+
+
+bash train_swin_tiny_3_18_pretrain_test.sh 8 30 "ovd_category_4_8_test" \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/model_weights/grounding_dino_swin-t_pretrain_obj365_goldg.pth \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/configs/mm_grounding_dino/synthetic_data/single_pretrain/grounding_dino_swin-t_pretrain_synthetic_data_only_base.py \
+  overwrite
+
+bash train_swin_tiny_3_18_pretrain_test.sh 4 30 "coco_before_training_eval_4_8" \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/model_weights/grounding_dino_swin-t_pretrain_obj365_goldg.pth \
+  /input_oe_data/jieyuz/weikaih/code/mmdetection/configs/mm_grounding_dino/synthetic_data/single_pretrain/grounding_dino_swin-t_pretrain_synthetic_data_only_ovd_category.py \
+  overwrite
