@@ -1,4 +1,4 @@
-_base_ = '/input_oe_data/jieyuz/weikaih/code/mmdetection/configs/mm_grounding_dino/grounding_dino_swin-t_pretrain_base.py'
+_base_ = '../../grounding_dino_swin-t_pretrain_base.py'
 
 optim_wrapper = dict(
     _delete_=True,
