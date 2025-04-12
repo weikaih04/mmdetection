@@ -1,5 +1,17 @@
 _base_ = 'grounding_dino_swin-t_pretrain_joint_base.py'
 
+max_epochs = 10
+param_scheduler = [
+    dict(
+        type='MultiStepLR',
+        begin=0,
+        end=max_epochs,
+        by_epoch=True,
+        milestones=[6],
+        gamma=0.1)
+]
+train_cfg = dict(max_epochs=max_epochs, val_interval=1)
+
 train_pipeline = [
     dict(type='LoadImageFromFile', backend_args=_base_.backend_args),
     dict(type='LoadAnnotations', with_bbox=True),
@@ -152,7 +164,7 @@ combined_dataset = dict(
 
 # You need to know or compute the number of samples in each dataset.
 # For illustration, let’s say:
-source_ratio = [5, 1, 1, 1]
+source_ratio = [2, 1, 1, 1]
 # source_ratio = [1]
 batch_size = 16
 
