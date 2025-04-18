@@ -150,7 +150,7 @@ ovd_category_train_pipeline = [
         tokenizer_name=_base_.lang_model_name,
         num_sample_negative=85,
         # change this
-        label_map_file='data/ovd_50k/annotations/label_map.json',
+        label_map_file='data/ovd/annotations/panoptic_train_label_map.json',
         max_tokens=256),
     dict(
         type='PackDetInputs',
