@@ -173,49 +173,12 @@ coco_od_dataset = dict(
 data_root = 'data/coco/'
 dataset_prefixes = [
     'refcoco_testA',
-    'refcoco+_testA',
     'refcocog_test',
-    'grefcoco_testA',
 ]
 dataset_type = 'ODVGDataset'
 datasets = [
     dict(
         ann_file='mdetr_annotations/finetune_refcoco_testA.json',
-        backend_args=None,
-        data_prefix=dict(img='train2014/'),
-        data_root='data/coco/',
-        pipeline=[
-            dict(
-                backend_args=None,
-                imdecode_backend='pillow',
-                type='LoadImageFromFile'),
-            dict(
-                backend='pillow',
-                keep_ratio=True,
-                scale=(
-                    800,
-                    1333,
-                ),
-                type='FixScaleResize'),
-            dict(type='LoadAnnotations', with_bbox=True),
-            dict(
-                meta_keys=(
-                    'img_id',
-                    'img_path',
-                    'ori_shape',
-                    'img_shape',
-                    'scale_factor',
-                    'text',
-                    'custom_entities',
-                    'tokens_positive',
-                ),
-                type='PackDetInputs'),
-        ],
-        return_classes=True,
-        test_mode=True,
-        type='MDETRStyleRefCocoDataset'),
-    dict(
-        ann_file='mdetr_annotations/finetune_refcoco+_testA.json',
         backend_args=None,
         data_prefix=dict(img='train2014/'),
         data_root='data/coco/',
@@ -284,41 +247,6 @@ datasets = [
         return_classes=True,
         test_mode=True,
         type='MDETRStyleRefCocoDataset'),
-    dict(
-        ann_file='mdetr_annotations/finetune_grefcoco_testA.json',
-        backend_args=None,
-        data_prefix=dict(img='train2014/'),
-        data_root='data/coco/',
-        pipeline=[
-            dict(
-                backend_args=None,
-                imdecode_backend='pillow',
-                type='LoadImageFromFile'),
-            dict(
-                backend='pillow',
-                keep_ratio=True,
-                scale=(
-                    800,
-                    1333,
-                ),
-                type='FixScaleResize'),
-            dict(type='LoadAnnotations', with_bbox=True),
-            dict(
-                meta_keys=(
-                    'img_id',
-                    'img_path',
-                    'ori_shape',
-                    'img_shape',
-                    'scale_factor',
-                    'text',
-                    'custom_entities',
-                    'tokens_positive',
-                ),
-                type='PackDetInputs'),
-        ],
-        return_classes=True,
-        test_mode=True,
-        type='MDETRStyleRefCocoDataset'),
 ]
 default_hooks = dict(
     checkpoint=dict(interval=1, type='CheckpointHook'),
@@ -350,16 +278,6 @@ metrics = [
         ),
         type='RefExpMetric'),
     dict(
-        ann_file='data/coco/mdetr_annotations/finetune_refcoco+_testA.json',
-        iou_thrs=0.5,
-        metric='bbox',
-        topk=(
-            1,
-            5,
-            10,
-        ),
-        type='RefExpMetric'),
-    dict(
         ann_file='data/coco/mdetr_annotations/finetune_refcocog_test.json',
         iou_thrs=0.5,
         metric='bbox',
@@ -369,13 +287,6 @@ metrics = [
             10,
         ),
         type='RefExpMetric'),
-    dict(
-        ann_file='data/coco/mdetr_annotations/finetune_grefcoco_testA.json',
-        iou_thrs=0.5,
-        metric='bbox',
-        thresh_f1=1.0,
-        thresh_score=0.7,
-        type='gRefCOCOMetric'),
 ]
 model = dict(
     as_two_stage=True,
@@ -576,77 +487,7 @@ test_dataloader = dict(
                 test_mode=True,
                 type='MDETRStyleRefCocoDataset'),
             dict(
-                ann_file='mdetr_annotations/finetune_refcoco+_testA.json',
-                backend_args=None,
-                data_prefix=dict(img='train2014/'),
-                data_root='data/coco/',
-                pipeline=[
-                    dict(
-                        backend_args=None,
-                        imdecode_backend='pillow',
-                        type='LoadImageFromFile'),
-                    dict(
-                        backend='pillow',
-                        keep_ratio=True,
-                        scale=(
-                            800,
-                            1333,
-                        ),
-                        type='FixScaleResize'),
-                    dict(type='LoadAnnotations', with_bbox=True),
-                    dict(
-                        meta_keys=(
-                            'img_id',
-                            'img_path',
-                            'ori_shape',
-                            'img_shape',
-                            'scale_factor',
-                            'text',
-                            'custom_entities',
-                            'tokens_positive',
-                        ),
-                        type='PackDetInputs'),
-                ],
-                return_classes=True,
-                test_mode=True,
-                type='MDETRStyleRefCocoDataset'),
-            dict(
                 ann_file='mdetr_annotations/finetune_refcocog_test.json',
-                backend_args=None,
-                data_prefix=dict(img='train2014/'),
-                data_root='data/coco/',
-                pipeline=[
-                    dict(
-                        backend_args=None,
-                        imdecode_backend='pillow',
-                        type='LoadImageFromFile'),
-                    dict(
-                        backend='pillow',
-                        keep_ratio=True,
-                        scale=(
-                            800,
-                            1333,
-                        ),
-                        type='FixScaleResize'),
-                    dict(type='LoadAnnotations', with_bbox=True),
-                    dict(
-                        meta_keys=(
-                            'img_id',
-                            'img_path',
-                            'ori_shape',
-                            'img_shape',
-                            'scale_factor',
-                            'text',
-                            'custom_entities',
-                            'tokens_positive',
-                        ),
-                        type='PackDetInputs'),
-                ],
-                return_classes=True,
-                test_mode=True,
-                type='MDETRStyleRefCocoDataset'),
-            dict(
-                ann_file='mdetr_annotations/finetune_grefcoco_testA.json',
                 backend_args=None,
                 data_prefix=dict(img='train2014/'),
                 data_root='data/coco/',
@@ -689,23 +530,11 @@ test_dataloader = dict(
 test_evaluator = dict(
     dataset_prefixes=[
         'refcoco_testA',
-        'refcoco+_testA',
         'refcocog_test',
-        'grefcoco_testA',
     ],
     metrics=[
         dict(
             ann_file='data/coco/mdetr_annotations/finetune_refcoco_testA.json',
-            iou_thrs=0.5,
-            metric='bbox',
-            topk=(
-                1,
-                5,
-                10,
-            ),
-            type='RefExpMetric'),
-        dict(
-            ann_file='data/coco/mdetr_annotations/finetune_refcoco+_testA.json',
             iou_thrs=0.5,
             metric='bbox',
             topk=(
@@ -724,13 +553,6 @@ test_evaluator = dict(
                 10,
             ),
             type='RefExpMetric'),
-        dict(
-            ann_file='data/coco/mdetr_annotations/finetune_grefcoco_testA.json',
-            iou_thrs=0.5,
-            metric='bbox',
-            thresh_f1=1.0,
-            thresh_score=0.7,
-            type='gRefCOCOMetric'),
     ],
     type='MultiDatasetsEvaluator')
 test_pipeline = [
@@ -1142,77 +964,7 @@ val_dataloader = dict(
                 test_mode=True,
                 type='MDETRStyleRefCocoDataset'),
             dict(
-                ann_file='mdetr_annotations/finetune_refcoco+_testA.json',
-                backend_args=None,
-                data_prefix=dict(img='train2014/'),
-                data_root='data/coco/',
-                pipeline=[
-                    dict(
-                        backend_args=None,
-                        imdecode_backend='pillow',
-                        type='LoadImageFromFile'),
-                    dict(
-                        backend='pillow',
-                        keep_ratio=True,
-                        scale=(
-                            800,
-                            1333,
-                        ),
-                        type='FixScaleResize'),
-                    dict(type='LoadAnnotations', with_bbox=True),
-                    dict(
-                        meta_keys=(
-                            'img_id',
-                            'img_path',
-                            'ori_shape',
-                            'img_shape',
-                            'scale_factor',
-                            'text',
-                            'custom_entities',
-                            'tokens_positive',
-                        ),
-                        type='PackDetInputs'),
-                ],
-                return_classes=True,
-                test_mode=True,
-                type='MDETRStyleRefCocoDataset'),
-            dict(
                 ann_file='mdetr_annotations/finetune_refcocog_test.json',
-                backend_args=None,
-                data_prefix=dict(img='train2014/'),
-                data_root='data/coco/',
-                pipeline=[
-                    dict(
-                        backend_args=None,
-                        imdecode_backend='pillow',
-                        type='LoadImageFromFile'),
-                    dict(
-                        backend='pillow',
-                        keep_ratio=True,
-                        scale=(
-                            800,
-                            1333,
-                        ),
-                        type='FixScaleResize'),
-                    dict(type='LoadAnnotations', with_bbox=True),
-                    dict(
-                        meta_keys=(
-                            'img_id',
-                            'img_path',
-                            'ori_shape',
-                            'img_shape',
-                            'scale_factor',
-                            'text',
-                            'custom_entities',
-                            'tokens_positive',
-                        ),
-                        type='PackDetInputs'),
-                ],
-                return_classes=True,
-                test_mode=True,
-                type='MDETRStyleRefCocoDataset'),
-            dict(
-                ann_file='mdetr_annotations/finetune_grefcoco_testA.json',
                 backend_args=None,
                 data_prefix=dict(img='train2014/'),
                 data_root='data/coco/',
@@ -1570,23 +1322,11 @@ val_dataset_refcocog_test = dict(
 val_evaluator = dict(
     dataset_prefixes=[
         'refcoco_testA',
-        'refcoco+_testA',
         'refcocog_test',
-        'grefcoco_testA',
     ],
     metrics=[
         dict(
             ann_file='data/coco/mdetr_annotations/finetune_refcoco_testA.json',
-            iou_thrs=0.5,
-            metric='bbox',
-            topk=(
-                1,
-                5,
-                10,
-            ),
-            type='RefExpMetric'),
-        dict(
-            ann_file='data/coco/mdetr_annotations/finetune_refcoco+_testA.json',
             iou_thrs=0.5,
             metric='bbox',
             topk=(
@@ -1605,13 +1345,6 @@ val_evaluator = dict(
                 10,
             ),
             type='RefExpMetric'),
-        dict(
-            ann_file='data/coco/mdetr_annotations/finetune_grefcoco_testA.json',
-            iou_thrs=0.5,
-            metric='bbox',
-            thresh_f1=1.0,
-            thresh_score=0.7,
-            type='gRefCOCOMetric'),
     ],
     type='MultiDatasetsEvaluator')
 val_evaluator_all_val = dict(
