@@ -69,9 +69,26 @@ class ODVGDataset(BaseDetDataset):
                 out_data_list.append(data_info)
             else:
                 anno = data['grounding']
-                data_info['text'] = anno['caption']
+                caption = anno.get('caption', '')
                 regions = anno['regions']
 
+                if caption.strip() == '':
+                    # 1. 提取所有短语
+                    phrases = [r['phrase'] for r in regions]
+                    # 2. 拼成一个长 caption（每段后面加 “. ”）
+                    caption = ". ".join(phrases) + ". "
+                    # 3. 计算每段短语在 caption 中的字符 span
+                    spans = []
+                    offset = 0
+                    for p in phrases:
+                        spans.append([[offset, offset + len(p)]])
+                        offset += len(p) + 2  # “. ” 两个字符
+                    # 4. 把新 caption 和新 span 回写到 regions
+                    for r, span in zip(regions, spans):
+                        r['tokens_positive'] = span
+                data_info['text'] = caption
+
+                
                 instances = []
                 phrases = {}
                 for i, region in enumerate(regions):
