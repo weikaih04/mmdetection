@@ -69,60 +69,38 @@ class ODVGDataset(BaseDetDataset):
                 out_data_list.append(data_info)
             else:
                 anno = data['grounding']
-                caption = anno['caption']
+                data_info['text'] = anno['caption']
                 regions = anno['regions']
-                # custom_entities when caption is a list of phrases
-                if isinstance(caption, (list, tuple)):
-                    # convert to tuple for hashing
-                    data_info['custom_entities'] = True
-                    data_info['text'] = tuple(caption)
-                    # build instances only (no manual tokens_positive)
-                    instances = []
-                    for i, region in enumerate(regions):
-                        boxes = region['bbox']
-                        if not isinstance(boxes[0], list):
-                            boxes = [boxes]
-                        for box in boxes:
-                            x1, y1, x2, y2 = box
-                            if (x2 - x1) < 1 or (y2 - y1) < 1:
-                                continue
-                            instances.append({
-                                'ignore_flag': 0,
-                                'bbox': box,
-                                'bbox_label': i
-                            })
-                    data_info['instances'] = instances
-                    data_info['dataset_mode'] = 'VG'
-                else:
-                    # standard caption string + phrases dict
-                    data_info['custom_entities'] = False
-                    data_info['text'] = caption
-                    instances = []
-                    phrases = {}
-                    for i, region in enumerate(regions):
-                        boxes = region['bbox']
-                        phrase = region['phrase']
-                        tokens_positive = region.get('tokens_positive')
-                        if not isinstance(boxes[0], list):
-                            boxes = [boxes]
-                        for box in boxes:
-                            x1, y1, x2, y2 = box
-                            if (x2 - x1) < 1 or (y2 - y1) < 1:
-                                continue
-                            instances.append({
-                                'ignore_flag': 0,
-                                'bbox': box,
-                                'bbox_label': i
-                            })
-                            phrases[i] = {
-                                'phrase': phrase,
-                                'tokens_positive': tokens_positive
-                            }
-                    data_info['instances'] = instances
-                    data_info['phrases'] = phrases
-                    data_info['dataset_mode'] = 'VG'
 
-            out_data_list.append(data_info)
+                instances = []
+                phrases = {}
+                for i, region in enumerate(regions):
+                    bbox = region['bbox']
+                    phrase = region['phrase']
+                    tokens_positive = region['tokens_positive']
+                    if not isinstance(bbox[0], list):
+                        bbox = [bbox]
+                    for box in bbox:
+                        instance = {}
+                        x1, y1, x2, y2 = box
+                        inter_w = max(0, min(x2, data['width']) - max(x1, 0))
+                        inter_h = max(0, min(y2, data['height']) - max(y1, 0))
+                        if inter_w * inter_h == 0:
+                            continue
+                        if (x2 - x1) < 1 or (y2 - y1) < 1:
+                            continue
+                        instance['ignore_flag'] = 0
+                        instance['bbox'] = box
+                        instance['bbox_label'] = i
+                        phrases[i] = {
+                            'phrase': phrase,
+                            'tokens_positive': tokens_positive
+                        }
+                        instances.append(instance)
+                data_info['instances'] = instances
+                data_info['phrases'] = phrases
+                data_info['dataset_mode'] = self.dataset_mode
+                out_data_list.append(data_info)
 
+        del data_list
         return out_data_list
-
