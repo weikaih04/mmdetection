@@ -174,7 +174,7 @@ ovd_category_dataset = dict(
 
 phrase_train_pipeline = [
     dict(type='LoadImageFromFile', backend_args=_base_.backend_args),
-    dict(type='LoadAnnotations', with_bbox=True), 
+    dict(type='LoadAnnotations', with_bbox=True),
     dict(type='RandomFlip', prob=0.5),
     dict(
         type='RandomChoice',
@@ -182,15 +182,16 @@ phrase_train_pipeline = [
             [
                 dict(
                     type='RandomChoiceResize',
-                    scales=[(480, 1333), (512, 1333), (544, 1333),
-                            (576, 1333), (608, 1333), (640, 1333),
-                            (672, 1333), (704, 1333), (736, 1333),
-                            (768, 1333), (800, 1333)],
+                    scales=[(480, 1333), (512, 1333), (544, 1333), (576, 1333),
+                            (608, 1333), (640, 1333), (672, 1333), (704, 1333),
+                            (736, 1333), (768, 1333), (800, 1333)],
                     keep_ratio=True)
             ],
             [
                 dict(
                     type='RandomChoiceResize',
+                    # The radio of all image in train dataset < 7
+                    # follow the original implement
                     scales=[(400, 4200), (500, 4200), (600, 4200)],
                     keep_ratio=True),
                 dict(
@@ -200,24 +201,25 @@ phrase_train_pipeline = [
                     allow_negative_crop=True),
                 dict(
                     type='RandomChoiceResize',
-                    scales=[(480, 1333), (512, 1333), (544, 1333),
-                            (576, 1333), (608, 1333), (640, 1333),
-                            (672, 1333), (704, 1333), (736, 1333),
-                            (768, 1333), (800, 1333)],
+                    scales=[(480, 1333), (512, 1333), (544, 1333), (576, 1333),
+                            (608, 1333), (640, 1333), (672, 1333), (704, 1333),
+                            (736, 1333), (768, 1333), (800, 1333)],
                     keep_ratio=True)
             ]
-        ]
-    ),
+        ]),
     dict(type='FilterAnnotations', min_gt_bbox_wh=(1e-2, 1e-2)),
     dict(
+        type='RandomSamplingNegPos',
+        tokenizer_name=_base_.lang_model_name,
+        num_sample_negative=85,
+        max_tokens=256),
+    dict(
         type='PackDetInputs',
-        meta_keys=(
-            'img_id','img_path','ori_shape','img_shape',
-            'scale_factor','flip','flip_direction',
-            'text','custom_entities','tokens_positive'
-        )
-    )
+        meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
+                   'scale_factor', 'flip', 'flip_direction', 'text',
+                   'custom_entities', 'tokens_positive', 'dataset_mode'))
 ]
+
 
 ovd_phrase_dataset = dict(
     type='ODVGDataset',

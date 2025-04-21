@@ -32,7 +32,7 @@ val_dataset_single_cat = dict(
     type='MDETRStyleRefCocoDataset',
     data_root=data_root,
     ann_file='mdetr_annotations/single_category_ref_4_19.json',
-    data_prefix=dict(img='train2014/'),
+    data_prefix=dict(img='single_category_ref/'),
     test_mode=True,
     return_classes=True,
     # filter_cfg will drop all samples whose GT category_id is not in [1]
@@ -41,8 +41,20 @@ val_dataset_single_cat = dict(
     backend_args=None
 )
 
+val_dataset_single_cat = dict(
+    type='SingleCategoryRefDataset',        # ← new dataset
+    data_root=data_root,
+    ann_file='mdetr_annotations/single_category_ref_4_19.json',
+    data_prefix=dict(img='single_category_ref/'),
+    test_mode=True,
+    return_classes=True,
+    # optionally keep only one category
+    filter_cfg=dict(filter_empty_gt=False, cat_ids=[1]),
+    pipeline=test_pipeline,
+)
+
 val_evaluator_single_cat = dict(
-    type='ODVGMetric',                # or 'RefExpMetric' if you prefer the original bbox‑F1
+    type='SingleCategoryRefMetric',                # or 'RefExpMetric' if you prefer the original bbox‑F1
     ann_file=data_root + 'mdetr_annotations/single_category_ref_4_19.json',
     iou_thrs=0.5
 )
@@ -53,10 +65,5 @@ val_dataloader = dict(
 )
 test_dataloader = val_dataloader
 
-val_evaluator = dict(
-    _delete_=True,
-    type='MultiDatasetsEvaluator',
-    metrics=[val_evaluator_single_cat],
-    dataset_prefixes=['single_cat_1']
-)
+val_evaluator = val_evaluator_single_cat
 test_evaluator = val_evaluator
