@@ -220,7 +220,7 @@ phrase_train_pipeline = [
 ovd_single_phrase_dataset = dict(
     type='ODVGDataset',
     data_root='data/ovd_single_category/',
-    ann_file='annotations/panoptic_train_500000_odvg_phrase_grounding.json',
+    ann_file='annotations/panoptic_train_50000_odvg_phrase_grounding.json',
     label_map_file=None,
     data_prefix=dict(img='train/'),
     filter_cfg=dict(filter_empty_gt=True),
@@ -294,7 +294,7 @@ ref_single_category_dataset = dict(
 ref_single_phrase_dataset = dict(
     type='ODVGDataset',
     data_root='data/ref_single_category/',
-    ann_file='annotations/panoptic_train_500000_odvg_phrase_grounding.json',
+    ann_file='annotations/panoptic_train_50000_odvg_phrase_grounding.json',
     label_map_file=None,
     data_prefix=dict(img='train/'),
     filter_cfg=dict(filter_empty_gt=True),
