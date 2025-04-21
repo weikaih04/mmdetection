@@ -1,4 +1,4 @@
-_base_ = '../grounding_dino_swin-t_pretrain_obj365.py'
+_base_ = '../../grounding_dino_swin-t_pretrain_base.py'
 
 optim_wrapper = dict(
     _delete_=True,
