@@ -29,7 +29,6 @@ n=${1:-8}
 exp_name=${2:-default_eval}
 checkpoint=${3:-"None"}
 results_dir=${4:-"/exp_outputs"}
-
 # Check that checkpoint is provided
 if [ "${checkpoint}" = "None" ]; then
     echo "Error: Please provide a valid checkpoint file as argument 3."
@@ -38,9 +37,16 @@ fi
 
 # Define the list of config file paths
 CONFIGS=(
-  "configs/mm_grounding_dino/refcoco/grounding_dino_swin-t_pretrain_zeroshot_refexp_mini.py"
-  "configs/mm_grounding_dino/odinw/grounding_dino_swin-t_pretrain_odinw13.py"
-)
+  "configs/mm_grounding_dino/grounding_dino_swin-t_pretrain_coco_eval.py"
+  "configs/mm_grounding_dino/lvis/grounding_dino_swin-t_pretrain_zeroshot_mini-lvis.py"
+  "configs/mm_grounding_dino/lvis/grounding_dino_swin-t_pretrain_zeroshot_lvis.py"
+  "configs/mm_grounding_dino/single_category_ref/grounding_dino_swin-t_single_category_ref.py"
+  "configs/mm_grounding_dino/dod/grounding_dino_swin-t_pretrain_zeroshot_concat_dod.py"
+  "configs/mm_grounding_dino/dod/grounding_dino_swin-t_pretrain_zeroshot_parallel_dod.py"
+  "configs/mm_grounding_dino/refcoco/grounding_dino_swin-t_pretrain_zeroshot_refexp.py"
+#   "configs/mm_grounding_dino/odinw/grounding_dino_swin-t_pretrain_odinw13.py"
+  "configs/mm_grounding_dino/odinw/grounding_dino_swin-t_pretrain_odinw35.py"
+) 
 
 # (Optional) Install required packages if not already present
 apt-get update
