@@ -8,7 +8,7 @@ echo "Preparing local directory…"
 mkdir -p \
   "${LOCAL_ROOT}/panoptic_train" \
   "${LOCAL_ROOT}/annotations" \
-  "${LOCAL_ROOT}/train"
+  "${LOCAL_ROOT}/train_keep_color_v3"
 
 echo "Starting selective downloads…"
 
