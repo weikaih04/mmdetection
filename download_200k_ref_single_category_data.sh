@@ -8,7 +8,7 @@ echo "Preparing local directory…"
 mkdir -p \
   "${LOCAL_ROOT}/panoptic_train" \
   "${LOCAL_ROOT}/annotations" \
-  "${LOCAL_ROOT}/train_keep_color_v3"
+  "${LOCAL_ROOT}/train"
 
 echo "Starting selective downloads…"
 
@@ -22,7 +22,7 @@ gsutil -m rsync -r -x "separate_annotations/" ${REMOTE_BUCKET}/annotations ${LOC
 
 # 3) train_keep_color → renamed locally to 'train'
 gsutil -m cp -r \
-  "${REMOTE_BUCKET}/train_keep_color_v2/*" \
+  "${REMOTE_BUCKET}/train_keep_color_v3/*" \
   "${LOCAL_ROOT}/train" &
 
 wait
