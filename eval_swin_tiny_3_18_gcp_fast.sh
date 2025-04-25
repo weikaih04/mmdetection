@@ -37,12 +37,13 @@ fi
 
 # Define the list of config file paths
 CONFIGS=(
-  "configs/mm_grounding_dino/grounding_dino_swin-t_pretrain_coco_eval.py"
-  "configs/mm_grounding_dino/lvis/grounding_dino_swin-t_pretrain_zeroshot_mini-lvis.py"
-  "configs/mm_grounding_dino/single_category_ref/grounding_dino_swin-t_single_category_ref.py"
-  "configs/mm_grounding_dino/dod/grounding_dino_swin-t_pretrain_zeroshot_parallel_dod.py"
-  "configs/mm_grounding_dino/refcoco/grounding_dino_swin-t_pretrain_zeroshot_refexp.py"
-  "configs/mm_grounding_dino/odinw/grounding_dino_swin-t_pretrain_odinw35.py"
+#   "configs/mm_grounding_dino/grounding_dino_swin-t_pretrain_coco_eval.py"
+#   "configs/mm_grounding_dino/lvis/grounding_dino_swin-t_pretrain_zeroshot_mini-lvis.py"
+#   "configs/mm_grounding_dino/single_category_ref/grounding_dino_swin-t_single_category_ref.py"
+#   "configs/mm_grounding_dino/dod/grounding_dino_swin-t_pretrain_zeroshot_parallel_dod.py"
+#   "configs/mm_grounding_dino/refcoco/grounding_dino_swin-t_pretrain_zeroshot_refexp.py"
+#   "configs/mm_grounding_dino/odinw/grounding_dino_swin-t_pretrain_odinw35.py"
+  "configs/mm_grounding_dino/v3det/grounding_dino_swin-t_pretrain_zeroshot_v3det.py"
 ) 
 
 # (Optional) Install required packages if not already present
