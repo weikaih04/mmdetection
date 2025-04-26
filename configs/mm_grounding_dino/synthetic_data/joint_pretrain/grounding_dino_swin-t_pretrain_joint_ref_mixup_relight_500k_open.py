@@ -151,7 +151,7 @@ ovd_category_train_pipeline = [
         tokenizer_name=_base_.lang_model_name,
         num_sample_negative=85,
         # change this
-        label_map_file='data/ovd/annotations/panoptic_train_50000_label_map.json',
+        label_map_file='data/ovd/annotations/panoptic_train_500000_label_map.json',
         max_tokens=256),
     dict(
         type='PackDetInputs',
@@ -163,8 +163,8 @@ ovd_category_train_pipeline = [
 ovd_category_dataset = dict(
     type='ODVGDataset',
     data_root='data/ovd/',
-    ann_file='annotations/panoptic_train_50000_odvg_category.json',
-    label_map_file='annotations/panoptic_train_50000_label_map.json',
+    ann_file='annotations/panoptic_train_500000_odvg_category.json',
+    label_map_file='annotations/panoptic_train_500000_label_map.json',
     data_prefix=dict(img='train/'),
     filter_cfg=dict(filter_empty_gt=True),
     pipeline=ovd_category_train_pipeline,
@@ -224,7 +224,7 @@ phrase_train_pipeline = [
 ovd_phrase_dataset = dict(
     type='ODVGDataset',
     data_root='data/ovd/',
-    ann_file='annotations/panoptic_train_50000_odvg_phrase_grounding.json',
+    ann_file='annotations/panoptic_train_500000_odvg_phrase_grounding.json',
     label_map_file=None,
     data_prefix=dict(img='train/'),
     filter_cfg=dict(filter_empty_gt=True),
@@ -274,7 +274,7 @@ ref_category_train_pipeline = [
         tokenizer_name=_base_.lang_model_name,
         num_sample_negative=85,
         # change this
-        label_map_file='data/ref/annotations/panoptic_train_50000_label_map.json',
+        label_map_file='data/ref/annotations/panoptic_train_500000_label_map.json',
         max_tokens=256),
     dict(
         type='PackDetInputs',
@@ -286,8 +286,8 @@ ref_category_train_pipeline = [
 ref_category_dataset = dict(
     type='ODVGDataset',
     data_root='data/ref/',
-    ann_file='annotations/panoptic_train_50000_odvg_category.json',
-    label_map_file='annotations/panoptic_train_50000_label_map.json',
+    ann_file='annotations/panoptic_train_500000_odvg_category.json',
+    label_map_file='annotations/panoptic_train_500000_label_map.json',
     data_prefix=dict(img='train/'),
     filter_cfg=dict(filter_empty_gt=True),
     pipeline=ref_category_train_pipeline,
@@ -298,7 +298,7 @@ ref_category_dataset = dict(
 ref_phrase_dataset = dict(
     type='ODVGDataset',
     data_root='data/ref/',
-    ann_file='annotations/panoptic_train_50000_odvg_phrase_grounding.json',
+    ann_file='annotations/panoptic_train_500000_odvg_phrase_grounding.json',
     label_map_file=None,
     data_prefix=dict(img='train/'),
     filter_cfg=dict(filter_empty_gt=True),
