@@ -20,7 +20,7 @@ resume_mode=${6:-resume}             # "overwrite" or "resume"
 output_root=${7:-"/exp_outputs"}     # base dir for all experiments
 gcs_bucket=${8:-"gs://your-bucket/your-path"}  # root bucket path
 
-MAX_RETRY=20
+MAX_RETRY=10
 
 if [ "${config_path}" = "None" ]; then
   echo "Error: please provide a config path as argument 5."
