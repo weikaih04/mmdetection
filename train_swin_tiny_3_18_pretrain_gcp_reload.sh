@@ -19,7 +19,7 @@ resume_mode=${6:-resume}             # "overwrite" or "resume"
 output_root=${7:-"/exp_outputs"}     # base dir for all experiments
 gcs_bucket=${8:-"gs://your-bucket/your-path"}  # root bucket path
 
-MAX_RETRY=10
+MAX_RETRY=1
 
 if [ "${config_path}" = "None" ]; then
   echo "Error: please provide a config path as argument 5."
@@ -36,8 +36,8 @@ elif [ "${resume_mode}" = "resume" ]; then
   echo "[MODE] resume → creating and populating ${OUTPUT_DIR} from GCS"
   mkdir -p "${OUTPUT_DIR}"
   # Pull down existing outputs if any
-  gsutil -m cp -r "${gcs_bucket}/${exp_name}/"* "${OUTPUT_DIR}/" || \
-    echo "⚠️ No existing remote outputs to pull down."
+  gsutil -m cp -r "${gcs_bucket}/${exp_name}/." "${OUTPUT_DIR}/" \
+    || echo "⚠️ No existing remote outputs to pull down."
 else
   echo "[WARN] Unknown resume_mode '${resume_mode}', defaulting to overwrite"
   rm -rf "${OUTPUT_DIR}"
@@ -81,9 +81,9 @@ while true; do
   attempt=$((attempt+1))
   echo "⚠️ Training crashed (exit ${exit_code}) on attempt ${attempt}."
 
-  # Copy partial results back to GCS
+  # Copy partial results back to GCS (contents only)
   echo "⏫ Copying partial outputs to ${gcs_bucket}/${exp_name}/ …"
-  gsutil -m cp -r "${OUTPUT_DIR}" "${gcs_bucket}/${exp_name}/"
+  gsutil -m cp -r "${OUTPUT_DIR}/." "${gcs_bucket}/${exp_name}/"
 
   if [ $attempt -ge $MAX_RETRY ]; then
     echo "❌ Reached max retries (${MAX_RETRY}). Exiting."
@@ -96,6 +96,7 @@ done
 
 # === Final copy after success ===
 echo "⏫ Final copy of outputs to ${gcs_bucket}/${exp_name}/ …"
-gsutil -m cp -r "${OUTPUT_DIR}" "${gcs_bucket}/${exp_name}/"
+# copy contents, not the parent folder itself
+gsutil -m cp -r "${OUTPUT_DIR}/." "${gcs_bucket}/${exp_name}/"
 
 echo "All done. Outputs in ${OUTPUT_DIR} and at ${gcs_bucket}/${exp_name}/"
