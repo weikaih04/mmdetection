@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # -----------------------------------------------------------
-# train_and_retry.sh
 #
 # Usage:
 #   bash train_and_retry.sh <num_gpus> <epochs> <exp_name> <pretrained_weights> \
@@ -59,7 +58,7 @@ fi
 
 # === Resume flag ===
 if [ "${resume_mode}" = "resume" ]; then
-  RESUME_FLAG="--auto-resume"
+  RESUME_FLAG="--resume"
 else
   RESUME_FLAG=""
 fi
@@ -70,7 +69,8 @@ while true; do
   echo
   echo "=== Attempt $((attempt+1)) starting at $(date) ==="
   ./tools/dist_train.sh "${config_path}" "${n}" \
-    --cfg-options ${CFG_OPTS} ${RESUME_FLAG}
+    --cfg-options ${CFG_OPTS} \
+    ${RESUME_FLAG}
   exit_code=$?
 
   if [ $exit_code -eq 0 ]; then
