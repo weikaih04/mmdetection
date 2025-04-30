@@ -17,7 +17,6 @@ def parse_args():
     parser.add_argument(
         '--amp',
         action='store_true',
-        default=True,
         help='enable automatic-mixed-precision training')
     parser.add_argument(
         '--auto-scale-lr',
