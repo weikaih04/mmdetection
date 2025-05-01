@@ -36,7 +36,6 @@ fi
 
 # Run distributed training using --cfg-options to override parameters, including load_from
 ./tools/dist_train.sh ${config_path} $n \
-    --amp \
     --cfg-options train_cfg.max_epochs=$epochs work_dir=${OUTPUT_DIR} load_from=${pretrained_weights} ${resume_flag}
 
 # Example test commands (uncomment if needed)
