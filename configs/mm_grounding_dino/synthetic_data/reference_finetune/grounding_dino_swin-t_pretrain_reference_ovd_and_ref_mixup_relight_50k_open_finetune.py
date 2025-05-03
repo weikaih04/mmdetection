@@ -3,7 +3,7 @@ _base_ = 'grounding_dino_swin-t_pretrain_reference_base.py'
 optim_wrapper = dict(
     _delete_=True,
     type='OptimWrapper',
-    optimizer=dict(type='AdamW', lr=0.0004, weight_decay=0.0001),
+    optimizer=dict(type='AdamW', lr=0.0002, weight_decay=0.0001),
     clip_grad=dict(max_norm=0.1, norm_type=2),
     paramwise_cfg=dict(
         custom_keys={
@@ -159,7 +159,7 @@ phrase_train_pipeline = [
 
 ovd_referring_dataset = dict(
     type='ODVGDataset',
-    data_root='data/ovd/',
+    data_root='data/ovd_50k',
     ann_file='annotations/panoptic_train_50000_odvg_referring.json',
     label_map_file=None,
     data_prefix=dict(img='train/'),
@@ -168,7 +168,6 @@ ovd_referring_dataset = dict(
     return_classes=True,
     backend_args=None,
 )
-
 ref_referring_dataset = dict(
     type='ODVGDataset',
     data_root='data/ref/',
@@ -184,13 +183,13 @@ ref_referring_dataset = dict(
 # Combined dataset
 combined_dataset = dict(
     type='ConcatDataset',
-    datasets=[ovd_referring_dataset, ref_referring_dataset, flickr30k_dataset, obj365_dataset, gqa_dataset]
+    datasets=[ovd_referring_dataset]
 )
 
 # You need to know or compute the number of samples in each dataset.
 # For illustration, let’s say:
-source_ratio = [3, 3, 1, 1, 1]
-# source_ratio = [1]
+# source_ratio = [3, 3, 1, 1, 1]
+source_ratio = [1]
 batch_size = 16
 
 train_dataloader = dict(
