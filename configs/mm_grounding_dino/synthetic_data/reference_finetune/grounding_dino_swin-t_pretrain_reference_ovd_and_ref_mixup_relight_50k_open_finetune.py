@@ -159,7 +159,7 @@ phrase_train_pipeline = [
 
 ovd_referring_dataset = dict(
     type='ODVGDataset',
-    data_root='data/ovd_50k',
+    data_root='data/ovd',
     ann_file='annotations/panoptic_train_50000_odvg_referring.json',
     label_map_file=None,
     data_prefix=dict(img='train/'),
