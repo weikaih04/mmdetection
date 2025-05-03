@@ -9,21 +9,21 @@ optim_wrapper = dict(
         custom_keys={
             'absolute_pos_embed': dict(decay_mult=0.),
             'backbone': dict(lr_mult=0.1),
-            'language_model': dict(lr_mult=0.1),
+            # 'language_model': dict(lr_mult=0),
         }))
 
-max_epochs = 10
+# learning policy
+max_epochs = 3
 param_scheduler = [
     dict(
         type='MultiStepLR',
         begin=0,
         end=max_epochs,
         by_epoch=True,
-        milestones=[6],
+        milestones=[3],
         gamma=0.1)
 ]
 train_cfg = dict(max_epochs=max_epochs, val_interval=1)
-
 
 train_pipeline = [
     dict(type='LoadImageFromFile', backend_args=_base_.backend_args),
