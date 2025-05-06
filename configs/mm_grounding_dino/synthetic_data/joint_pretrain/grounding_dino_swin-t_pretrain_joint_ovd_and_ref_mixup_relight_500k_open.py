@@ -313,12 +313,43 @@ combined_dataset = dict(
     datasets=[ovd_category_dataset, ovd_phrase_dataset, ref_category_dataset, ref_phrase_dataset, flickr30k_dataset, obj365_dataset, gqa_dataset]
 )
 
-# You need to know or compute the number of samples in each dataset.
-# For illustration, let’s say:
-source_ratio = [4, 2, 4, 2, 1, 1, 1]
-# source_ratio = [1]
-batch_size = 16
+# Training stages configuration
+mixup_epochs = 3
+real_epochs = 3
+max_epochs = mixup_epochs + real_epochs
 
+# Source ratios for different stages
+mixup_source_ratio = [2, 1, 2, 1, 1, 1, 1]  # synthetic + real
+real_source_ratio = [0, 0, 0, 0, 1, 1, 1]   # only real
+
+# Learning rate configuration
+mixup_lr = 0.0004  # Initial learning rate for mixup stage
+real_lr = 0.0002   # Initial learning rate for real stage
+
+# Update param_scheduler to handle both stages
+param_scheduler = [
+    # Mixup stage scheduler
+    dict(
+        type='MultiStepLR',
+        begin=0,
+        end=mixup_epochs,
+        by_epoch=True,
+        milestones=[mixup_epochs],  # Decay at the end of mixup stage
+        gamma=0.1),
+    # Real stage scheduler
+    dict(
+        type='MultiStepLR',
+        begin=mixup_epochs,
+        end=max_epochs,
+        by_epoch=True,
+        milestones=[max_epochs],  # Decay at the end of real stage
+        gamma=0.1)
+]
+
+train_cfg = dict(max_epochs=max_epochs, val_interval=5)
+
+# Update train_dataloader to use the new stage-based sampler
+batch_size = 16
 train_dataloader = dict(
     _delete_=True,
     batch_size=batch_size,
@@ -326,10 +357,14 @@ train_dataloader = dict(
     persistent_workers=True,
     dataset=combined_dataset,
     sampler=dict(
-        type='MultiSourceSamplerForEpoch',
+        type='StageCurriculumSampler',
         batch_size=batch_size,
-        source_ratio=source_ratio,
-        aug_source_idx=0, 
+        mixup_epochs=mixup_epochs,
+        real_epochs=real_epochs,
+        mixup_source_ratio=mixup_source_ratio,
+        real_source_ratio=real_source_ratio,
+        mixup_lr=mixup_lr,
+        real_lr=real_lr,
         shuffle=True
     ),
     batch_sampler=dict(type='AspectRatioBatchSampler')

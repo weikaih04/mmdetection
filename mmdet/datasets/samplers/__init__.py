@@ -8,11 +8,13 @@ from .multi_data_sampler import MultiDataSampler
 from .multi_source_sampler import GroupMultiSourceSampler, MultiSourceSampler
 from .track_img_sampler import TrackImgSampler
 from .multi_source_sampler_epoch import MultiSourceSamplerForEpoch
-
+from .dynamic_curriculum_sampler import DynamicCurriculumSampler
+from .stage_curriculum_sampler import StageCurriculumSampler
 __all__ = [
     'ClassAwareSampler', 'AspectRatioBatchSampler', 'MultiSourceSampler',
     'GroupMultiSourceSampler', 'TrackImgSampler',
     'TrackAspectRatioBatchSampler', 'MultiDataSampler',
     'MultiDataAspectRatioBatchSampler', 'CustomSampleSizeSampler',
-    'MultiSourceSamplerForEpoch',
+    'MultiSourceSamplerForEpoch', 'DynamicCurriculumSampler',
+    'StageCurriculumSampler'
 ]

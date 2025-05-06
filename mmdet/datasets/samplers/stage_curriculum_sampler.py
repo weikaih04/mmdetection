@@ -1,0 +1,91 @@
+from typing import Iterator, List, Optional, Sized, Union
+
+import torch
+from mmengine.dist import get_dist_info, sync_random_seed
+from torch.utils.data import Sampler
+
+from mmdet.registry import DATA_SAMPLERS
+from .multi_source_sampler_epoch import MultiSourceSamplerForEpoch
+
+
+@DATA_SAMPLERS.register_module()
+class StageCurriculumSampler(MultiSourceSamplerForEpoch):
+    """Stage-based Curriculum Sampler for two-stage training.
+
+    This sampler implements a two-stage curriculum learning strategy:
+    1. Mixup stage: Mix synthetic and real data with specified ratios
+    2. Real stage: Use only real data
+
+    Args:
+        dataset (Sized): A ConcatDataset with attribute `cumulative_sizes`.
+        batch_size (int): Size of a mini-batch (per GPU).
+        mixup_epochs (int): Number of epochs for mixup stage.
+        real_epochs (int): Number of epochs for real data stage.
+        mixup_source_ratio (List[Union[int, float]]): Sampling ratios for mixup stage.
+        real_source_ratio (List[Union[int, float]]): Sampling ratios for real stage.
+        shuffle (bool): Whether to shuffle the datasets.
+        seed (int, optional): Random seed. If None, a synchronized random seed
+            will be used.
+    """
+
+    def __init__(self,
+                 dataset: Sized,
+                 batch_size: int,
+                 mixup_epochs: int,
+                 real_epochs: int,
+                 mixup_source_ratio: List[Union[int, float]],
+                 real_source_ratio: List[Union[int, float]],
+                 shuffle: bool = True,
+                 seed: Optional[int] = None) -> None:
+        super().__init__(dataset, batch_size, mixup_source_ratio, shuffle, seed)
+        
+        self.mixup_epochs = mixup_epochs
+        self.real_epochs = real_epochs
+        self.mixup_source_ratio = mixup_source_ratio
+        self.real_source_ratio = real_source_ratio
+        
+        # Validate dataset structure
+        assert len(dataset.datasets) == len(mixup_source_ratio) == len(real_source_ratio), \
+            f'Number of datasets ({len(dataset.datasets)}) must match length of source ratios'
+
+    def set_epoch(self, epoch: int) -> None:
+        """Set the epoch and update source ratio based on current stage.
+
+        Args:
+            epoch (int): Current epoch number.
+        """
+        self.current_epoch = epoch
+        
+        # Determine current stage and update source ratio
+        if epoch < self.mixup_epochs:
+            self.source_ratio = self.mixup_source_ratio
+            self.aug_source_idx = 0  # Use first synthetic dataset
+        else:
+            self.source_ratio = self.real_source_ratio
+            self.aug_source_idx = 4  # Use first real dataset
+        
+        # Update num_per_source based on new source_ratio
+        self.num_per_source = [
+            int(self.batch_size * sr / sum(self.source_ratio)) 
+            for sr in self.source_ratio
+        ]
+        self.num_per_source[0] = self.batch_size - sum(self.num_per_source[1:])
+        
+        # Reinitialize source indices
+        self._init_source_indices()
+
+    def __iter__(self) -> Iterator[int]:
+        """Generate indices for the current epoch.
+
+        Returns:
+            Iterator[int]: Iterator of indices for the current epoch.
+        """
+        return super().__iter__()
+
+    def __len__(self) -> int:
+        """Get the length of the sampler.
+
+        Returns:
+            int: Length of the sampler.
+        """
+        return super().__len__() 
