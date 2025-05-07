@@ -151,13 +151,12 @@ ovd_category_train_pipeline = [
         type='RandomSamplingNegPos',
         tokenizer_name=_base_.lang_model_name,
         num_sample_negative=85,
-        # change this
         label_map_file='data/ovd/annotations/panoptic_train_label_map.json',
         max_tokens=256),
     dict(
         type='PackDetInputs',
         meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
-                   'scale_factor', x'flip', 'flip_direction', 'text',
+                   'scale_factor', 'flip', 'flip_direction', 'text',
                    'custom_entities', 'tokens_positive', 'dataset_mode'))
 ]
 
