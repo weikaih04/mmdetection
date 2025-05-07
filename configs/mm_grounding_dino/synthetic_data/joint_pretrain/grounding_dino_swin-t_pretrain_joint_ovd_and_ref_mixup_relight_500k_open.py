@@ -314,12 +314,13 @@ combined_dataset = dict(
 )
 
 # Training stages configuration
-mixup_epochs = 3
+mixup_epochs = 2
 real_epochs = 3
 max_epochs = mixup_epochs + real_epochs
 
-# Source ratios for different stages
-mixup_source_ratio = [2, 1, 2, 1, 1, 1, 1]  # synthetic + real
+# 采样比例
+initial_mixup_ratio = [2, 1, 2, 1, 1, 1, 1]  # synthetic + real
+final_mixup_ratio = [2, 1, 2, 1, 2, 2, 2]   # reduced synthetic, increased real
 real_source_ratio = [0, 0, 0, 0, 1, 1, 1]   # only real
 
 # Learning rate configuration
@@ -328,25 +329,23 @@ real_lr = 0.0002   # Initial learning rate for real stage
 
 # Update param_scheduler to handle both stages
 param_scheduler = [
-    # Mixup stage scheduler
     dict(
-        type='MultiStepLR',
+        type='LinearLR',
+        start_factor=1.0,
+        end_factor=0.1,
         begin=0,
         end=mixup_epochs,
-        by_epoch=True,
-        milestones=[mixup_epochs],  # Decay at the end of mixup stage
-        gamma=0.1),
-    # Real stage scheduler
+        by_epoch=True),
     dict(
-        type='MultiStepLR',
+        type='LinearLR',
+        start_factor=1.0,
+        end_factor=0.1,
         begin=mixup_epochs,
         end=max_epochs,
-        by_epoch=True,
-        milestones=[max_epochs],  # Decay at the end of real stage
-        gamma=0.1)
+        by_epoch=True)
 ]
 
-train_cfg = dict(max_epochs=max_epochs, val_interval=5)
+train_cfg = dict(max_epochs=max_epochs, val_interval=1)
 
 # Update train_dataloader to use the new stage-based sampler
 batch_size = 16
@@ -361,10 +360,11 @@ train_dataloader = dict(
         batch_size=batch_size,
         mixup_epochs=mixup_epochs,
         real_epochs=real_epochs,
-        mixup_source_ratio=mixup_source_ratio,
+        initial_mixup_ratio=initial_mixup_ratio,
+        final_mixup_ratio=final_mixup_ratio,
         real_source_ratio=real_source_ratio,
-        mixup_lr=mixup_lr,
-        real_lr=real_lr,
+        aug_source_mixup=0,  # Index of the anchor dataset for mixup stage
+        aug_source_real=4,   # Index of the anchor dataset for real stage
         shuffle=True
     ),
     batch_sampler=dict(type='AspectRatioBatchSampler')
