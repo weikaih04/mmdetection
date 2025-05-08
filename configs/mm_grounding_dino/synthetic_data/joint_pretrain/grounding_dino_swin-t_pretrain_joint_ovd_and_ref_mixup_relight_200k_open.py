@@ -313,25 +313,15 @@ real_source_ratio = [0, 0, 0, 0, 1, 1, 1]   # only real
 
 
 # Learning rate configuration
-mixup_lr = 0.0004  # Initial learning rate for mixup stage
-real_lr = 0.0002   # Initial learning rate for real stage
-
-# Update param_scheduler to handle both stages
+# optim_wrapper defines the initial LR (0.0004 for mixup stage)
 param_scheduler = [
     dict(
-        type='LinearLR',
-        start_factor=1.0,
-        end_factor=0.1,
+        type='MultiStepLR',
         begin=0,
-        end=mixup_epochs,
-        by_epoch=True),
-    dict(
-        type='LinearLR',
-        start_factor=1.0,
-        end_factor=0.1,
-        begin=mixup_epochs,
         end=max_epochs,
-        by_epoch=True)
+        by_epoch=True,
+        milestones=[mixup_epochs],  # Change LR at the start of the real stage (epoch 3)
+        gamma=0.5)                 # New LR = 0.0004 * 0.5 = 0.0002 for real stage
 ]
 
 train_cfg = dict(max_epochs=max_epochs, val_interval=1)
