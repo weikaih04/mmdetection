@@ -74,6 +74,10 @@ class StageCurriculumSampler(MultiSourceSamplerForEpoch):
         Returns:
             List[float]: Current sampling ratios for mixup stage.
         """
+        # Handle edge case where mixup stage is 1 epoch or less
+        if self.mixup_epochs <= 1:
+            return self.initial_mixup_ratio
+            
         # Calculate progress using cosine schedule
         progress = epoch / (self.mixup_epochs - 1)  # Normalized progress [0, 1]
         current_ratios = []
