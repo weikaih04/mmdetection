@@ -22,7 +22,7 @@ param_scheduler = [
         begin=0,
         end=max_epochs,
         by_epoch=True,
-        milestones=[5],
+        milestones=[8],
         gamma=0.1)
 ]
 train_cfg = dict(max_epochs=max_epochs, val_interval=5)
@@ -291,9 +291,9 @@ ref_category_dataset = dict(
     filter_cfg=dict(filter_empty_gt=True),
     pipeline=ref_category_train_pipeline,
     return_classes=True,
+    need_text=False,
     backend_args=None,
 )
-
 ref_phrase_dataset = dict(
     type='ODVGDataset',
     data_root='data/ref/',

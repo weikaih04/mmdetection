@@ -291,6 +291,7 @@ ref_category_dataset = dict(
     filter_cfg=dict(filter_empty_gt=True),
     pipeline=ref_category_train_pipeline,
     return_classes=True,
+    need_text=False,
     backend_args=None,
 )
 
@@ -314,7 +315,7 @@ combined_dataset = dict(
 )
 
 # You need to know or compute the number of samples in each dataset.
-# For illustration, let’s say:
+# For illustration, let's say:
 source_ratio = [4, 2, 4, 2, 1, 1, 1]
 # source_ratio = [1]
 batch_size = 16

@@ -291,6 +291,7 @@ ref_category_dataset = dict(
     filter_cfg=dict(filter_empty_gt=True),
     pipeline=ref_category_train_pipeline,
     return_classes=True,
+    need_text=False,
     backend_args=None,
 )
 

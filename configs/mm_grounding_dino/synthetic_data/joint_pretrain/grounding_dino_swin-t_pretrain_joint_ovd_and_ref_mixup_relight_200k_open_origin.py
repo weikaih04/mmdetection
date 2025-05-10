@@ -292,9 +292,9 @@ ref_category_dataset = dict(
     filter_cfg=dict(filter_empty_gt=True),
     pipeline=ref_category_train_pipeline,
     return_classes=True,
+    need_text=False,
     backend_args=None,
 )
-
 ref_phrase_dataset = dict(
     type='ODVGDataset',
     data_root='data/ref/',
@@ -318,7 +318,7 @@ combined_dataset = dict(
 # For illustration, let’s say:
 source_ratio = [4, 2, 4, 2, 1, 1, 1]
 # source_ratio = [1]
-batch_size = 16
+batch_size = 8
 
 train_dataloader = dict(
     _delete_=True,
