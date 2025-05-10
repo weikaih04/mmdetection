@@ -15,14 +15,14 @@ optim_wrapper = dict(
 )
 
 
-max_epochs = 3
+max_epochs = 6
 param_scheduler = [
     dict(
         type='MultiStepLR',
         begin=0,
         end=max_epochs,
         by_epoch=True,
-        milestones=[3],
+        milestones=[6],
         gamma=0.1)
 ]
 train_cfg = dict(max_epochs=max_epochs, val_interval=5)
