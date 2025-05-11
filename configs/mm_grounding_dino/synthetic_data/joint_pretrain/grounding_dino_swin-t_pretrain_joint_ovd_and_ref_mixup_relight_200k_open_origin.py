@@ -318,7 +318,7 @@ combined_dataset = dict(
 # For illustration, let’s say:
 source_ratio = [4, 2, 4, 2, 1, 1, 1]
 # source_ratio = [1]
-batch_size = 8
+batch_size = 16
 
 train_dataloader = dict(
     _delete_=True,
