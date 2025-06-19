@@ -22,7 +22,7 @@ gsutil -m rsync -r -x "separate_annotations/" ${REMOTE_BUCKET}/annotations ${LOC
 
 # 3) train_keep_color → renamed locally to 'train'
 gsutil -m cp -r \
-  "${REMOTE_BUCKET}/train_keep_color_v3/*" \
+  "${REMOTE_BUCKET}/train/*" \
   "${LOCAL_ROOT}/train" &
 
 wait
