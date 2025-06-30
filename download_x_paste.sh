@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-REMOTE_BUCKET="gs://oe-training-jieyu/weikaih/grounding_dino_synthetic_data/x_paste_50k"
+REMOTE_BUCKET="gs://oe-training-jieyu/weikaih/grounding_dino_synthetic_data/x_paste_50k_v2_new"
 LOCAL_ROOT="/mmdetection/data/ovd"
 
 echo "Preparing local directory…"
